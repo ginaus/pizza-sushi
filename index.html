@@ -33,6 +33,20 @@
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
+    .results {
+      margin: 2rem 0 1rem 0;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      font-size: 1.1rem;
+    }
+    .results span {
+      font-weight: bold;
+      color: #ff7043;
+    }
+    .results .sushi {
+      color: #42a5f5;
+    }
   </style>
 </head>
 <body>
@@ -46,20 +60,25 @@
   <div class="content">
     <h2>Da che parte stai?</h2>
     <p>Scegli la tua preferenza e scopri cosa pensano gli altri!</p>
+    <div class="results" id="results">
+      <div><span id="pizza-count">0</span> voti Pizza</div>
+      <div><span id="sushi-count" class="sushi">0</span> voti Sushi</div>
+    </div>
     <div style="display: flex; gap: 2rem; justify-content: center; margin: 2rem 0;">
       <div style="text-align: center;">
         <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Pizza_on_stone.jpg" alt="Pizza" style="width:120px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.10);"><br>
-        <button style="margin-top: 1rem; padding: 0.5rem 1.5rem; background: #ff7043; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer;">Pizza</button>
+        <button id="vote-pizza" style="margin-top: 1rem; padding: 0.5rem 1.5rem; background: #ff7043; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer;">Pizza</button>
       </div>
       <div style="text-align: center;">
         <img src="https://upload.wikimedia.org/wikipedia/commons/6/60/Sushi_platter.jpg" alt="Sushi" style="width:120px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.10);"><br>
-        <button style="margin-top: 1rem; padding: 0.5rem 1.5rem; background: #42a5f5; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer;">Sushi</button>
+        <button id="vote-sushi" style="margin-top: 1rem; padding: 0.5rem 1.5rem; background: #42a5f5; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer;">Sushi</button>
       </div>
     </div>
     <h3>Perché questa scelta?</h3>
     <p>Raccontaci nei commenti perché preferisci la pizza o il sushi!</p>
-    <textarea placeholder="Scrivi qui la tua motivazione..." style="width:100%; min-height:60px; border-radius:4px; border:1px solid #ccc; margin-bottom:1rem; padding:0.5rem;"></textarea>
-    <button style="background:#ffb347; color:#333; border:none; border-radius:4px; padding:0.5rem 1.5rem; font-size:1rem; cursor:pointer;">Invia</button>
+    <textarea id="comment" placeholder="Scrivi qui la tua motivazione..." style="width:100%; min-height:60px; border-radius:4px; border:1px solid #ccc; margin-bottom:1rem; padding:0.5rem;"></textarea>
+    <button id="send-comment" style="background:#ffb347; color:#333; border:none; border-radius:4px; padding:0.5rem 1.5rem; font-size:1rem; cursor:pointer;">Invia</button>
+    <div id="comments-list" style="margin-top:1.5rem;"></div>
     <hr style="margin:2rem 0;">
     <h3>Curiosità</h3>
     <ul>
@@ -70,4 +89,38 @@
     <p style="margin-top:2rem; color:#888; font-size:0.95rem;">Condividi il sito con i tuoi amici e scopri chi vince la sfida!</p>
   </div>
 </body>
+  <script>
+    // Conteggio voti (solo locale)
+    let pizzaVotes = 0;
+    let sushiVotes = 0;
+    const pizzaCount = document.getElementById('pizza-count');
+    const sushiCount = document.getElementById('sushi-count');
+    document.getElementById('vote-pizza').onclick = function() {
+      pizzaVotes++;
+      pizzaCount.textContent = pizzaVotes;
+      document.getElementById('vote-pizza').disabled = true;
+      document.getElementById('vote-sushi').disabled = true;
+    };
+    document.getElementById('vote-sushi').onclick = function() {
+      sushiVotes++;
+      sushiCount.textContent = sushiVotes;
+      document.getElementById('vote-pizza').disabled = true;
+      document.getElementById('vote-sushi').disabled = true;
+    };
+    // Commenti (solo locale)
+    document.getElementById('send-comment').onclick = function() {
+      const comment = document.getElementById('comment').value.trim();
+      if(comment) {
+        const list = document.getElementById('comments-list');
+        const div = document.createElement('div');
+        div.style.marginBottom = '0.7rem';
+        div.style.background = '#f3f3f3';
+        div.style.padding = '0.7rem 1rem';
+        div.style.borderRadius = '5px';
+        div.textContent = comment;
+        list.prepend(div);
+        document.getElementById('comment').value = '';
+      }
+    };
+  </script>
 </html>
